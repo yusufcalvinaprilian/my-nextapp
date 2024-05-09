@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import DetailProduct from "@/views/DetailProduct";
 
+
 const DetailProductPage = () => {
 	const { query } = useRouter();
 
@@ -18,3 +19,18 @@ const DetailProductPage = () => {
 };
 
 export default DetailProductPage;
+
+export async function getServerSideProps({
+	params,
+}: {
+	params: { product: string };
+}) {
+	// fetch data
+	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${params.product}`);
+	const response = await res.json();
+	return {
+		props: {
+			product: response.data,
+		},
+	};
+}
